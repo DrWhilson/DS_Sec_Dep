@@ -1,20 +1,29 @@
-const {ButtonBuilder, ButtonStyle, SlashCommandBuilder} = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('buttontst')
-		.setDescription('Create a button'),
-	async execute(interaction) {
-		const butt = new ButtonBuilder()
-            .setCustomId('butt')
-            .setLabel('Кнопка')
-            .setStyle(ButtonStyle.Primary);
-        const bu = new Discord.ActionRowBuilder()
-            .addComponents(butt);
+  data: new SlashCommandBuilder()
+    .setName('buttontst')
+    .setDescription('Create a button'),
+  async execute(interaction) {
+    const target = interaction.options.getUser('target');
+    const reason = interaction.options.getString('reason') ?? 'No reason provided';
 
-        await interaction.reply({
-            content:`Сообщение с кнопками!`,
-            components: [bu],
-        });
-	},
+    const confirm = new ButtonBuilder()
+      .setCustomId('confirm')
+      .setLabel('Confirm Ban')
+      .setStyle(ButtonStyle.Danger);
+
+    const cancel = new ButtonBuilder()
+      .setCustomId('cancel')
+      .setLabel('Cancel')
+      .setStyle(ButtonStyle.Secondary);
+
+    const row = new ActionRowBuilder()
+      .addComponents(cancel, confirm);
+
+    await interaction.reply({
+      content: `Are you sure you want to ban ${target} for reason: ${reason}?`,
+      components: [row],
+    });
+  },
 };
