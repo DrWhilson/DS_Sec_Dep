@@ -1,4 +1,4 @@
 #ignore node stuff
-./node_modules/*
-./config.json
-./token.txt
+/node_modules
+/config.json
+/token.txt
